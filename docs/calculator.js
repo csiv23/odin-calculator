@@ -1,25 +1,30 @@
+const plusbutton = document.getElementById("add");;
+const onebutton = document.getElementById("one");
+
+
 const add = function (firstNum, secondNum) {
-    return firstNum + secondNum;
-  };
-  
-  const subtract = function (a, b) {
-    return a - b;
-  };
-  
-  const sum = function (...nums) {
-    let sum = 0;
-    for (let i = 0; i < nums.length; i++) {
-      sum = add(sum, nums[i]);
-    }
-    return parseInt(sum);
-  };
-  
-  const multiply = function (...nums) {
-    let product = 0;
-    for (let i = 0; i < nums.length; i++) {
-      product *= nums[i];
-    }
-  
-    return parseInt (product);
-  };
+  return firstNum + secondNum;
+};
+
+const subtract = function (a, b) {
+  return a - b;
+};
+
+const multiply = function (a, b) {
+  return a * b;
+};
+
+const divide = function (a, b) {
+  return a / b;
+}
+
+function operate(operator, a, b) {
+  return operator(a, b)
+}
+
+onebutton.addEventListener("click", function() {
+   document.getElementById("screen").textContent = "1";
+})
+
+
 
