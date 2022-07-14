@@ -17,14 +17,16 @@ const sevenbutton = document.getElementById("seven");
 const eightbutton = document.getElementById("eight");
 const ninebutton = document.getElementById("nine");
 
+const pointbutton = document.getElementById("point");
 const equalsbutton = document.getElementById("equals");
 const clearbutton = document.getElementById("clear");
+
 
 var screenContent = "";
 var firstNum = null;
 var secondNum = null;
 
-var plusPressed, minusPressed, timesPressed, dividePressed;
+var invalidCalculation;
 
 var chosenOperator;
 
@@ -43,7 +45,13 @@ const multiply = function (a, b) {
 };
 
 const divide = function (a, b) {
-  return a / b;
+  if (b == 0) {
+    alert("Diving by zero will cause an error!");
+    invalidCalculation = true
+  }
+  else {
+    return (a / b).toFixed(3);
+  }
 }
 
 function operate(operator, a, b) {
@@ -60,59 +68,96 @@ function setScreen(num) {
   screenContent = `${num}`;
 }
 
-function removeFirstNum() {
-  if(screen.textContent == firstNum) {
+function numPressed(num) {
+  if (screen.textContent == firstNum) {
     resetScreen();
   }
+  screen.textContent += `${num}`;
+  screenContent += `${num}`;
 }
 
-function setFirstNum() {
+function initNums() {
   if (firstNum == null) {
-    firstNum = parseInt(screenContent);
-    resetScreen();
+    if (screenContent != "") {
+      firstNum = parseFloat(screenContent);
+      resetScreen();
+    }
   }
   else if (secondNum == null) {
-    secondNum = parseInt(screenContent);
+    secondNum = parseFloat(screenContent);
     firstNum = operate(chosenOperator, firstNum, secondNum);
     secondNum = null;
     resetScreen();
     setScreen(firstNum);
   }
-  
-  console.log(`the firstNum is ${firstNum}`);
-  console.log(`the secondNum is ${secondNum}`);
-  console.log("");
-  
 }
 
-plusbutton.addEventListener("click", function(){
-  setFirstNum();
-  chosenOperator = add;
+function pointPressed() {
+  if (!screen.textContent.includes(".")) {
+    screen.textContent += ".";
+    screenContent += ".";
+  }
+}
+
+function operationPressed(operator) {
+  initNums();
+  chosenOperator = operator;
+}
+
+document.addEventListener("keydown", function (event) {
+  let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  let operations = ["+", "-", "/", "x"]
+
+  const key = event.key; // const {key} = event; ES6+
+  console.log(key);
+  if (key == ".") {
+    pointPressed();
+  }
+
+  if(digits.includes(key)) {
+    numPressed(key);
+  }
+
+  if (operations.includes(key)) {
+    var operator;
+    if (key == "+") operator = add;
+    else if (key == "-") operator = subtract;
+    else if (key == "*" || key == "x") operator = multiply;
+    else if (key == "/") operator = divide;
+    operationPressed(operator);
+  }
+  
+  if (key === "Backspace" || key === "Delete") {
+    screen.textContent = screen.textContent.slice(0, -1);
+    screenContent = screenContent.slice(0, -1);
+  }
+});
+
+plusbutton.addEventListener("click", function () {
+  operationPressed(add);
 })
 
-minusbutton.addEventListener("click", function(){
-  setFirstNum();
-  chosenOperator = subtract;
+minusbutton.addEventListener("click", function () {
+  operationPressed(subtract);
 })
 
-timesbutton.addEventListener("click", function(){
-  setFirstNum();
-  chosenOperator = multiply;
+timesbutton.addEventListener("click", function () {
+  operationPressed(multiply);
 })
 
-dividebutton.addEventListener("click", function(){
-  setFirstNum();
-  chosenOperator = divide;
+dividebutton.addEventListener("click", function () {
+  operationPressed(divide);
 })
 
-equalsbutton.addEventListener("click", function(){
+equalsbutton.addEventListener("click", function () {
   var result = "";
+
   if (firstNum == null) {
     screen.textContent = `${result}`;
     screenContent = `${result}`;
   }
-  else if(secondNum == null) {
-    secondNum = parseInt(screenContent)
+  else if (secondNum == null) {
+    secondNum = parseFloat(screenContent)
     result = operate(chosenOperator, firstNum, secondNum);
   }
   else {
@@ -122,72 +167,56 @@ equalsbutton.addEventListener("click", function(){
   screenContent = `${result}`;
 })
 
-clearbutton.addEventListener("click", function() {
+clearbutton.addEventListener("click", function () {
   resetScreen();
-  firstNum = null; 
+  firstNum = null;
   secondNum = null;
   chosenOperator = null;
-}) 
+})
 
-zerobutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "0";
-  screenContent += "0";
-}) 
+pointbutton.addEventListener("click", function () {
+pointPressed();
+})
 
-  onebutton.addEventListener("click", function() {
-    removeFirstNum();
-   screen.textContent += "1";
-   screenContent += "1";
-}) 
+zerobutton.addEventListener("click", function () {
+  numPressed(0);
+})
 
-twobutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "2";
-  screenContent += "2";
-}) 
+onebutton.addEventListener("click", function () {
+  numPressed(1);
+})
 
-threebutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "3";
-  screenContent += "3";
-}) 
+twobutton.addEventListener("click", function () {
+  numPressed(2);
+})
 
-fourbutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "4";
-  screenContent += "4";
-}) 
+threebutton.addEventListener("click", function () {
+  numPressed(3);
+})
 
-fivebutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "5";
-  screenContent += "5";
-}) 
+fourbutton.addEventListener("click", function () {
+  numPressed(4);
+})
 
-sixbutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "6";
-  screenContent += "6";
-}) 
+fivebutton.addEventListener("click", function () {
+  numPressed(5);
+})
 
-sevenbutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "7";
-  screenContent += "7";
-}) 
+sixbutton.addEventListener("click", function () {
+  numPressed(6);
+})
 
-eightbutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "8";
-  screenContent += "8";
-}) 
+sevenbutton.addEventListener("click", function () {
+  numPressed(7);
+})
 
-ninebutton.addEventListener("click", function() {
-  removeFirstNum();
-  screen.textContent += "9";
-  screenContent += "9";
-}) 
+eightbutton.addEventListener("click", function () {
+  numPressed(8);
+})
+
+ninebutton.addEventListener("click", function () {
+  numPressed(9);
+})
 
 
 
