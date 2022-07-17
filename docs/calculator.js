@@ -46,7 +46,7 @@ const multiply = function (a, b) {
 
 const divide = function (a, b) {
   if (b == 0) {
-    alert("Diving by zero will cause an error!");
+    alert("error: diving by zero");
     invalidCalculation = true
   }
   else {
@@ -72,8 +72,15 @@ function numPressed(num) {
   if (screen.textContent == firstNum) {
     resetScreen();
   }
+
+  if(screen.textContent.length + 1 > 15){
+    alert("overload!")
+  } 
+  else 
+  {
   screen.textContent += `${num}`;
   screenContent += `${num}`;
+  }
 }
 
 function initNums() {
@@ -99,57 +106,14 @@ function pointPressed() {
   }
 }
 
-function operationPressed(operator) {
-  initNums();
-  chosenOperator = operator;
+function clearPressed() {
+  resetScreen();
+  firstNum = null;
+  secondNum = null;
+  chosenOperator = null;
 }
 
-document.addEventListener("keydown", function (event) {
-  let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-  let operations = ["+", "-", "/", "x"]
-
-  const key = event.key; // const {key} = event; ES6+
-  console.log(key);
-  if (key == ".") {
-    pointPressed();
-  }
-
-  if(digits.includes(key)) {
-    numPressed(key);
-  }
-
-  if (operations.includes(key)) {
-    var operator;
-    if (key == "+") operator = add;
-    else if (key == "-") operator = subtract;
-    else if (key == "*" || key == "x") operator = multiply;
-    else if (key == "/") operator = divide;
-    operationPressed(operator);
-  }
-  
-  if (key === "Backspace" || key === "Delete") {
-    screen.textContent = screen.textContent.slice(0, -1);
-    screenContent = screenContent.slice(0, -1);
-  }
-});
-
-plusbutton.addEventListener("click", function () {
-  operationPressed(add);
-})
-
-minusbutton.addEventListener("click", function () {
-  operationPressed(subtract);
-})
-
-timesbutton.addEventListener("click", function () {
-  operationPressed(multiply);
-})
-
-dividebutton.addEventListener("click", function () {
-  operationPressed(divide);
-})
-
-equalsbutton.addEventListener("click", function () {
+function equalsPressed() {
   var result = "";
 
   if (firstNum == null) {
@@ -165,17 +129,75 @@ equalsbutton.addEventListener("click", function () {
   }
   screen.textContent = `${result}`;
   screenContent = `${result}`;
+}
+
+function operationPressed(operator) {
+  initNums();
+  chosenOperator = operator;
+}
+
+document.addEventListener("keydown", function (event) {
+  let digits = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+  let operations = ["+", "-", "/", "x"]
+
+  const key = event.key; // const {key} = event; ES6+
+  console.log(key);
+
+
+  switch (key) {
+    case "Backspace":
+    case "Delete":
+      screen.textContent = screen.textContent.slice(0, -1);
+      screenContent = screenContent.slice(0, -1);
+      break;
+    case ".":
+      pointPressed();
+      break;
+    case "c":
+    case "C":
+      clearPressed();
+      break;
+    case "Enter":
+    case "=":
+      equalsPressed();
+      break;
+
+  }
+
+  if (digits.includes(key)) {
+    numPressed(key);
+  }
+
+  if (operations.includes(key)) {
+    var operator;
+    if (key == "+") operator = add;
+    else if (key == "-") operator = subtract;
+    else if (key == "*" || key == "x") operator = multiply;
+    else if (key == "/") operator = divide;
+    operationPressed(operator);
+  }
+
+});
+equalsbutton.addEventListener("click", equalsPressed);
+
+clearbutton.addEventListener("click", clearPressed);
+
+pointbutton.addEventListener("click", pointPressed);
+
+plusbutton.addEventListener("click", function () {
+  operationPressed(add);
 })
 
-clearbutton.addEventListener("click", function () {
-  resetScreen();
-  firstNum = null;
-  secondNum = null;
-  chosenOperator = null;
+minusbutton.addEventListener("click", function () {
+  operationPressed(subtract);
 })
 
-pointbutton.addEventListener("click", function () {
-pointPressed();
+timesbutton.addEventListener("click", function () {
+  operationPressed(multiply);
+})
+
+dividebutton.addEventListener("click", function () {
+  operationPressed(divide);
 })
 
 zerobutton.addEventListener("click", function () {
