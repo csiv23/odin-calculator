@@ -50,7 +50,7 @@ const divide = function (a, b) {
     invalidCalculation = true
   }
   else {
-    return (a / b).toFixed(3);
+    return parseFloat((a / b).toFixed(3));
   }
 }
 
@@ -97,6 +97,9 @@ function initNums() {
     resetScreen();
     setScreen(firstNum);
   }
+
+  console.log(firstNum);
+  console.log(secondNum);
 }
 
 function pointPressed() {
@@ -123,6 +126,8 @@ function equalsPressed() {
   else if (secondNum == null) {
     secondNum = parseFloat(screenContent)
     result = operate(chosenOperator, firstNum, secondNum);
+    firstNum = result;
+    secondNum = null;
   }
   else {
     result = firstNum;
