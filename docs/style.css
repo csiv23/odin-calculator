@@ -1,4 +1,11 @@
 
+body {
+    transform: scale(2.5);
+    transform-origin: 0 0;
+ }
+
+ #wrapper { width: 1000px; margin: 0 auto; }
+
 
 #screen {
     width:250px;
@@ -10,6 +17,7 @@
     font-family: "Segoe UI";
 }
 
+
 #buttons {
     display: flex;
     flex-direction: row;
@@ -17,6 +25,9 @@
     height: 225px;
     width: 250px;
     flex-wrap: wrap;
+}
+
+#add, #subtract, #multiply, #divide {
 }
 
 
