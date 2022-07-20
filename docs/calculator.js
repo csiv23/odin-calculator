@@ -29,6 +29,9 @@ var secondNum = null;
 var invalidCalculation;
 
 var chosenOperator;
+var prevOperator = null;
+
+var isEqualsPressed = false;
 
 const add = function (a, b) {
   console.log(`added ${a} and ${b} `);
@@ -73,13 +76,12 @@ function numPressed(num) {
     resetScreen();
   }
 
-  if(screen.textContent.length + 1 > 15){
+  if (screen.textContent.length + 1 > 15) {
     alert("overload!")
-  } 
-  else 
-  {
-  screen.textContent += `${num}`;
-  screenContent += `${num}`;
+  }
+  else {
+    screen.textContent += `${num}`;
+    screenContent += `${num}`;
   }
 }
 
@@ -91,15 +93,16 @@ function initNums() {
     }
   }
   else if (secondNum == null) {
-    secondNum = parseFloat(screenContent);
-    firstNum = operate(chosenOperator, firstNum, secondNum);
-    secondNum = null;
-    resetScreen();
-    setScreen(firstNum);
+    if (isEqualsPressed == false) {
+      secondNum = parseFloat(screenContent);
+      firstNum = operate(chosenOperator, firstNum, secondNum);
+      resetScreen();
+      setScreen(firstNum);
+    }
   }
-
   console.log(firstNum);
   console.log(secondNum);
+
 }
 
 function pointPressed() {
@@ -114,30 +117,37 @@ function clearPressed() {
   firstNum = null;
   secondNum = null;
   chosenOperator = null;
+  prevOperator = null;
 }
 
 function equalsPressed() {
   var result = "";
-
+  isEqualsPressed = true;
   if (firstNum == null) {
     screen.textContent = `${result}`;
     screenContent = `${result}`;
   }
-  else if (secondNum == null) {
-    secondNum = parseFloat(screenContent)
+  else {
+    if (secondNum == null || (screenContent != firstNum || chosenOperator.name != prevOperator.name)) {
+      secondNum = parseFloat(screenContent)
+    }
     result = operate(chosenOperator, firstNum, secondNum);
     firstNum = result;
-    secondNum = null;
+    prevOperator = chosenOperator;
   }
-  else {
-    result = firstNum;
-  }
+
   screen.textContent = `${result}`;
   screenContent = `${result}`;
+  isEqualsPressed = false;
 }
 
 function operationPressed(operator) {
   initNums();
+  if (prevOperator == null) {
+    prevOperator = operator;
+  } else {
+    prevOperator = chosenOperator;
+  }
   chosenOperator = operator;
 }
 

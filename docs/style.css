@@ -28,6 +28,11 @@ body {
 }
 
 #add, #subtract, #multiply, #divide {
+    background-color: lightcoral;
+}
+
+#point, #equals, #clear {
+    background-color: lightsteelblue;
 }
 
 
